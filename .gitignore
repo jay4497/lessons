@@ -1,4 +1,7 @@
 .idea
+.vscode
+.project
 composer.lock
 *.log
 thinkphp
+.env

@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{block name="title"}{/block}</title>
+    <link href="__PUBLIC__/assets/style/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="apple-admin-menu">
+        <ul class="list-group">
+            <li class="list-group-item">
+                item1
+            </li>
+        </ul>
+    </div>
+    <div class="apple-admin-body">
+        {block name="content"}{/block}
+    </div>
+</div>
+
+<style>
+    .apple-admin-menu{
+        max-width: 350px;
+        height:100%;
+    }
+</style>
+<script src="__PUBLIC__/assets/js/jquery.min.js"></script>
+{block name="js"}{/block}
+</body>
+</html>
