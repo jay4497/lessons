@@ -1,0 +1,30 @@
+{extend name="layouts/master"}
+{block name="content"}
+<div class="apple-search-box">
+
+</div>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th>手机号</th>
+        <th>邮箱</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
+    </tr>
+    {volist name="users" id="user"}
+    <tr>
+        <td>{$user.id}</td>
+        <td>{$user.user_name}</td>
+        <td>{$user.phone}</td>
+        <td>{$user.email}</td>
+        <td>{$user.created_at}</td>
+        <td>{$user.updated_at}</td>
+    </tr>
+    {/volist}
+</table>
+<div class="apple-page">
+    {$user->render()}
+</div>
+{/block}
