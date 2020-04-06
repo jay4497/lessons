@@ -1,0 +1,30 @@
+{extend name="layouts/master"}
+{block name="content"}
+<div class="apple-search-box">
+
+</div>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>分组目录</th>
+        <th>分组名称</th>
+        <th>操作</th>
+    </tr>
+    {volist name="groups" id="group"}
+    <tr>
+        <td>{$group.id}</td>
+        <td>{:str_repeat('-', $group['depth'])}{$group.name}</td>
+        <td>{$group.display_name}</td>
+        <td>
+            <a class="btn btn-xs btn-secondary" href="{:url('group/update', ['id' => $group['id']])}">
+                <i class="fa fa-edit"></i> 编辑
+            </a>
+            <a class="btn btn-xs btn-danger">
+                <i class="fa fa-trash"></i> 删除
+            </a>
+        </td>
+    </tr>
+    {/volist}
+</table>
+{/block}

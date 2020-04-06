@@ -26,7 +26,7 @@ class Group extends Backend
         $group_tree = $this->treeGroup();
         $groups = $this->treeList($group_tree);
 
-        $title = '';
+        $title = '分组管理';
         return view('', compact('groups', 'title'));
     }
 
@@ -34,6 +34,7 @@ class Group extends Backend
     {
         if($this->request->isPost()) {
             $data = $this->request->post();
+
         }
 
         $title = '';
