@@ -1,7 +1,12 @@
 {extend name="layouts/master"}
+{block name="title"}{$title}{/block}
 {block name="content"}
 <div class="apple-search-box">
 
+</div>
+
+<div class="btn-group" style="margin-bottom: 15px;">
+    <a class="btn btn-sm btn-outline-primary" href="{:url('user/add')}">添加</a>
 </div>
 
 <table class="table">
@@ -12,6 +17,7 @@
         <th>邮箱</th>
         <th>创建时间</th>
         <th>更新时间</th>
+        <th>操作</th>
     </tr>
     {volist name="users" id="user"}
     <tr>
@@ -21,10 +27,18 @@
         <td>{$user.email}</td>
         <td>{$user.created_at}</td>
         <td>{$user.updated_at}</td>
+        <td>
+            <a class="btn btn-sm btn-secondary" href="{:url('user/update', ['uid' => $user['id']])}">
+                编辑
+            </a>
+            <a class="btn btn-sm btn-danger" href="{:url('user/delete')}?ids={$user.id}">
+                删除
+            </a>
+        </td>
     </tr>
     {/volist}
 </table>
 <div class="apple-page">
-    {$user->render()}
+    {$users->render()}
 </div>
 {/block}

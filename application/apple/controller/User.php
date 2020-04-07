@@ -23,17 +23,20 @@ class User extends Backend
         $users = $this->model
             ->where($where)
             ->paginate(20);
-        return view('', compact('users'));
+        $title = '用户管理';
+        return view('', compact('users', 'title'));
     }
 
     public function add()
     {
         if($this->request->isPost()){
             $data = $this->request->post();
-            $_validate = $this->validate($data, 'User');
+            $_validate = $this->validate($data, 'User.add');
             if($_validate !== true) {
                 $this->error($_validate);
             }
+            $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+
             try{
                 $this->model->insert($data);
             } catch (\Exception $ex) {
@@ -55,11 +58,17 @@ class User extends Backend
         }
         if($this->request->isPost()){
             $data = $this->request->post();
-            $_validate = $this->validate($data, 'User');
+            $_validate = $this->validate($data, 'User.update');
             if($_validate !== true) {
                 $this->error($_validate);
             }
-            try{
+
+            if(empty($data['password'])){
+                unset($data['password']);
+            } else {
+                $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+            }
+            try {
                 $this->model
                     ->where('id', $uid)
                     ->save($data);
@@ -68,12 +77,13 @@ class User extends Backend
             }
             $this->success('更新成功', url('user/update', ['uid' => $uid]));
         }
-        $title = '添加用户';
-        return view('', compact('title'));
+        $title = '编辑用户信息';
+        return view('', compact('title', 'user'));
     }
 
     public function delete($ids)
     {
+        $ids = $this->request->request('ids');
         $_ids = $ids;
         if(!is_array($ids)){
             $_ids = explode(',', $ids);

@@ -11,12 +11,21 @@
 <div class="container-fluid">
     <div class="apple-admin-menu">
         <ul class="list-group">
+            <li class="list-group-item" style="height: 75px">
+                Logo
+            </li>
             <li class="list-group-item">
-                item1
+                <a style="display: block" href="{:url('group/index')}">权限分组</a>
+            </li>
+            <li class="list-group-item">
+                <a style="display: block;" href="{:url('user/index')}">用户管理</a>
             </li>
         </ul>
     </div>
     <div class="apple-admin-body">
+        <div class="apple-top-bar">
+            {block name="title"}{/block}
+        </div>
         {block name="content"}{/block}
     </div>
 </div>
@@ -26,11 +35,30 @@
         position: fixed;
         top:0;
         left:0;
-        width: 350px;
+        width: 240px;
         height:100%;
+        background-color: #101010;
+        color: #fff;
+        overflow-y: auto;
+    }
+    .apple-admin-menu .list-group-item{
+        background-color: transparent;
+        border-bottom:solid 1px #999;
+    }
+    .apple-admin-menu .list-group-item a{
+        color: #fff;
+    }
+    .apple-top-bar{
+        height: 45px;
+        line-height: 45px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-bottom:solid 1px #999;
+        margin-bottom: 24px;
+        margin-left: -40px;
     }
     .apple-admin-body{
-        padding-left: 365px;
+        padding-left: 265px;
     }
 </style>
 <script src="__PUBLIC__/assets/js/jquery.min.js"></script>

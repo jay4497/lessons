@@ -5,7 +5,7 @@
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="user-name">用户名</label>
         <div class="col-sm-10">
-            <input type="text" name="user_name" id="user-name" class="form-control" placeholder="用户名">
+            <input type="text" name="user_name" id="user-name" class="form-control" placeholder="用户名" value="{$user.user_name}">
         </div>
     </div>
     <div class="form-group row">
@@ -17,27 +17,27 @@
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="password-confirm">确认密码</label>
         <div class="col-sm-5">
-            <input type="password" name="password_confirm" id="password-confirm" class="form-control" placeholder="确认密码">
+            <input type="password" name="password-confirm" id="password-confirm" class="form-control" placeholder="确认密码">
         </div>
     </div>
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="phone">手机号</label>
         <div class="col-sm-3">
-            <input type="text" name="phone" id="phone" class="form-control" placeholder="手机号">
+            <input type="text" name="phone" id="phone" class="form-control" placeholder="手机号" value="{$user.phone}">
         </div>
     </div>
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="email">电子邮箱</label>
         <div class="col-sm-10">
-            <input type="text" name="email" id="email" class="form-control" placeholder="电子邮箱">
+            <input type="text" name="email" id="email" class="form-control" placeholder="电子邮箱" value="{$user.email}">
         </div>
     </div>
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="status">状态</label>
         <div class="col-sm-3">
             <select name="status" id="status" class="form-control">
-                <option value="normal">正常</option>
-                <option value="forbiden">禁止</option>
+                <option value="normal" {if condition="$user['status'] == 'normal'"}selected{/if}>正常</option>
+                <option value="forbiden" {if condition="$user['status'] == 'forbiden'"}selected{/if}>禁止</option>
             </select>
         </div>
     </div>
@@ -45,8 +45,8 @@
         <label class="col-form-label col-sm-1" for="type">用户类型</label>
         <div class="col-sm-2">
             <select name="type" id="type" class="form-control">
-                <option value="0">普通用户</option>
-                <option value="1">管理员</option>
+                <option value="0" {if condition="$user['type'] == 0"}selected{/if}>普通用户</option>
+                <option value="1" {if condition="$user['type'] == 1"}selected{/if}>管理员</option>
             </select>
         </div>
     </div>

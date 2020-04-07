@@ -35,9 +35,20 @@ class Group extends Backend
         if($this->request->isPost()) {
             $data = $this->request->post();
 
+            $_validate = $this->validate($data, 'Group');
+            if($_validate !== true) {
+                $this->error($_validate);
+            }
+
+            try{
+                $this->model->insert($data);
+            } catch (\Exception $ex) {
+                $this->error($ex->getMessage());
+            }
+            $this->success('添加成功', url('group/add'));
         }
 
-        $title = '';
+        $title = '添加分组';
         return view('', compact('title'));
     }
 
@@ -51,15 +62,40 @@ class Group extends Backend
         }
         if($this->request->isPost()) {
             $data = $this->request->post();
+
+            $_validate = $this->validate($data, 'Group');
+            if($_validate !== true) {
+                $this->error($_validate);
+            }
+
+            try{
+                $this->model->where('id', $id)->save($data);
+            } catch (\Exception $ex) {
+                $this->error($ex->getMessage());
+            }
+            $this->success('更新成功', url('group/update', ['id' => $id]));
         }
 
-        $title = '';
+        $title = '编辑分组信息';
         return view('', compact('title', 'group'));
     }
 
-    public function delete($ids)
+    public function delete()
     {
+        $ids = $this->request->request('ids');
+        $_ids = $ids;
+        if(!is_array($ids)){
+            $_ids = explode(',', $ids);
+        }
 
+        try{
+            $this->model
+                ->where('id', 'in', $_ids)
+                ->delete();
+        } catch (\Exception $ex) {
+            $this->error($ex->getMessage());
+        }
+        $this->success('删除成功', url('group/index'));
     }
 
     private function treeGroup($pid = 0)

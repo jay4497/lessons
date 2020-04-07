@@ -1,7 +1,12 @@
 {extend name="layouts/master"}
+{block name="title"}{$title}{/block}
 {block name="content"}
 <div class="apple-search-box">
 
+</div>
+
+<div class="btn-group" style="margin-bottom: 15px;">
+    <a class="btn btn-sm btn-outline-primary" href="{:url('group/add')}">添加</a>
 </div>
 
 <table class="table">
@@ -17,10 +22,10 @@
         <td>{:str_repeat('-', $group['depth'])}{$group.name}</td>
         <td>{$group.display_name}</td>
         <td>
-            <a class="btn btn-xs btn-secondary" href="{:url('group/update', ['id' => $group['id']])}">
+            <a class="btn btn-sm btn-secondary" href="{:url('group/update', ['id' => $group['id']])}">
                 <i class="fa fa-edit"></i> 编辑
             </a>
-            <a class="btn btn-xs btn-danger">
+            <a class="btn btn-sm btn-danger" href="{:url('group/delete')}?ids={$group.id}">
                 <i class="fa fa-trash"></i> 删除
             </a>
         </td>

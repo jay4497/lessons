@@ -7,7 +7,7 @@
         <div class="col-sm-3">
             <select name="pid" class="form-control">
                 {volist name="parents" id="parent"}
-                <option value="{$parent.id}">{:str_repeat('-', $parent['depth'])}{$parent.display_name}</option>
+                <option value="{$parent.id}" {if condition="$parent['id'] == $group['pid']"}selected{/if}>{:str_repeat('-', $parent['depth'])}{$parent.display_name}</option>
                 {/volist}
             </select>
         </div>
@@ -15,19 +15,19 @@
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="name">分组目录</label>
         <div class="col-sm-5">
-            <input type="text" name="name" id="name" class="form-control" placeholder="分组目录名">
+            <input type="text" name="name" id="name" class="form-control" placeholder="分组目录名" value="{$group.name}">
         </div>
     </div>
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="display_name">分组名称</label>
         <div class="col-sm-5">
-            <input type="text" name="display_name" id="display_name" class="form-control" placeholder="分组名称">
+            <input type="text" name="display_name" id="display_name" class="form-control" placeholder="分组名称" value="{$group.display_name}">
         </div>
     </div>
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="description">分组描述</label>
         <div class="col-sm-8">
-            <textarea name="description" id="description" class="form-control" placeholder="分组概要描述"></textarea>
+            <textarea name="description" id="description" class="form-control" placeholder="分组概要描述">{$group.description}</textarea>
         </div>
     </div>
     <div class="form-group row">

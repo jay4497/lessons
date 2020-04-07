@@ -6,14 +6,15 @@ CREATE TABLE `apl_user` (
   `avatar` VARCHAR(255) NULL DEFAULT '' COMMENT '头像',
   `email` VARCHAR(255) NULL DEFAULT '' COMMENT '电子邮箱',
   `phone` VARCHAR(20) NULL DEFAULT '' COMMENT '手机号',
-  `status` ENUM('normal', 'forbinden') DEFAULT 'normal' COMMENT '状态',
+  `type` TINYINT(1) DEFAULT 0 COMMENT '用户类型。0 普通用户，1 管理员',
+  `status` ENUM('normal', 'forbiden') DEFAULT 'normal' COMMENT '状态',
   `created_at` TIMESTAMP NULL,
   `updated_at` TIMESTAMP NULL,
   PRIMARY KEY (`id`),
   INDEX (`user_name`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT '用户表';
 
-INSERT INTO `apl_user` VALUES (1, 'apple', '$2y$10$8P5p65zWpFz.cMgdehiEK.C5YJ8qompeZia6ZrJoP92lc4yWngj4q', '', '', '', 'normal', '2020-04-01 10:30:22', '2020-04-01 10:30:22');
+INSERT INTO `apl_user` VALUES (1, 'apple', '$2y$10$8P5p65zWpFz.cMgdehiEK.C5YJ8qompeZia6ZrJoP92lc4yWngj4q', '', '', '', 1, 'normal', '2020-04-01 10:30:22', '2020-04-01 10:30:22');
 
 DROP TABLE IF EXISTS `apl_group`;
 CREATE TABLE `apl_group` (
