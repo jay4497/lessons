@@ -2,6 +2,7 @@
 namespace app\apple\controller;
 
 use app\common\controller\Backend;
+use think\Db;
 use think\Session;
 
 class User extends Backend
@@ -15,6 +16,9 @@ class User extends Backend
     {
         parent::_initialize();
         $this->model = new \app\apple\model\User;
+
+        $tree_data = $this->jsTree();
+        $this->assign('tree_data', json_encode($tree_data, JSON_UNESCAPED_UNICODE));
     }
 
     public function index()
@@ -37,11 +41,26 @@ class User extends Backend
             }
             $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
 
+            $privilleges = explode(',', $data['privilleges']);
+            Db::startTrans();
             try{
                 $this->model->insert($data);
+                $uid = $this->model->getLastInsID();
+                $pril_data = [];
+                foreach ($privilleges as $_pril) {
+                    $_temp = [
+                        'user_id' => $uid,
+                        'group_id' => $_pril,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    array_push($pril_data, $_temp);
+                }
+                Db::table('apl_group_user')->insertAll($pril_data);
             } catch (\Exception $ex) {
+                Db::rollback();
                 $this->error($ex->getMessage());
             }
+            Db::commit();
             $this->success('添加成功', url('user/add'));
         }
         $title = '添加用户';
@@ -68,13 +87,32 @@ class User extends Backend
             } else {
                 $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
             }
+
+            $privilleges = explode(',', $data['privilleges']);
+            Db::startTrans();
             try {
                 $this->model
                     ->where('id', $uid)
                     ->save($data);
+
+                Db::table('apl_group_user')
+                    ->where('user_id', $uid)
+                    ->delete();
+                $pril_data = [];
+                foreach ($privilleges as $_pril) {
+                    $_temp = [
+                        'user_id' => $uid,
+                        'group_id' => $_pril,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    array_push($pril_data, $_temp);
+                }
+                Db::table('apl_group_user')->insertAll($pril_data);
             } catch (\Exception $ex) {
+                Db::rollback();
                 $this->error($ex->getMessage());
             }
+            Db::commit();
             $this->success('更新成功', url('user/update', ['uid' => $uid]));
         }
         $title = '编辑用户信息';
