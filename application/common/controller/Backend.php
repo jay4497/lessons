@@ -3,9 +3,19 @@ namespace app\common\controller;
 
 use app\apple\model\Group;
 use think\Controller;
+use think\Session;
 
 class Backend extends Controller
 {
+    public function _initialize()
+    {
+        parent::_initialize();
+
+        if(!Session::has('user') && empty(Session::get('user'))){
+            $this->error('请登录', url('auth/user/login'));
+        }
+    }
+
     protected function jsTree($pid = 0)
     {
         $model = new Group;

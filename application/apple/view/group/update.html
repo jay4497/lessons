@@ -6,8 +6,9 @@
         <label class="col-form-label col-sm-1" for="parent">父 级</label>
         <div class="col-sm-3">
             <select name="pid" class="form-control">
+                <option value="0">顶级</option>
                 {volist name="parents" id="parent"}
-                <option value="{$parent.id}" {if condition="$parent['id'] == $group['pid']"}selected{/if}>{:str_repeat('-', $parent['depth'])}{$parent.display_name}</option>
+                <option value="{$parent.id}" {if condition="$parent['id'] == $group['pid']"}selected{/if}>{:str_repeat('├', $parent['depth'])} {$parent.display_name}</option>
                 {/volist}
             </select>
         </div>

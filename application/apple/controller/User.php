@@ -37,14 +37,14 @@ class User extends Backend
             $data = $this->request->post();
             $_validate = $this->validate($data, 'User.add');
             if($_validate !== true) {
-                $this->error($_validate);
+                $this->error('err: '. $_validate);
             }
             $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
 
             $privilleges = explode(',', $data['privilleges']);
             Db::startTrans();
             try{
-                $this->model->insert($data);
+                $this->model->allowField(true)->save($data);
                 $uid = $this->model->getLastInsID();
                 $pril_data = [];
                 foreach ($privilleges as $_pril) {
@@ -58,7 +58,7 @@ class User extends Backend
                 Db::table('apl_group_user')->insertAll($pril_data);
             } catch (\Exception $ex) {
                 Db::rollback();
-                $this->error($ex->getMessage());
+                $this->error('dberr: '. $ex->getMessage());
             }
             Db::commit();
             $this->success('添加成功', url('user/add'));
@@ -75,6 +75,14 @@ class User extends Backend
         if(empty($user)){
             $this->error('用户不存在', url('index/index'));
         }
+        $privilleges = Db::table('apl_group_user')
+            ->where('user_id', $user['id'])
+            ->select();
+        $pril_ids = [];
+        foreach ($privilleges as $_priv) {
+            array_push($pril_ids, $_priv['group_id']);
+        }
+        $pril_ids = implode(',', $pril_ids);
         if($this->request->isPost()){
             $data = $this->request->post();
             $_validate = $this->validate($data, 'User.update');
@@ -92,8 +100,9 @@ class User extends Backend
             Db::startTrans();
             try {
                 $this->model
-                    ->where('id', $uid)
-                    ->save($data);
+                    ->allowField(true)
+                    ->isUpdate(true)
+                    ->save($data, ['id' => $uid]);
 
                 Db::table('apl_group_user')
                     ->where('user_id', $uid)
@@ -116,7 +125,7 @@ class User extends Backend
             $this->success('更新成功', url('user/update', ['uid' => $uid]));
         }
         $title = '编辑用户信息';
-        return view('', compact('title', 'user'));
+        return view('', compact('title', 'user', 'pril_ids'));
     }
 
     public function delete($ids)

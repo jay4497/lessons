@@ -19,7 +19,7 @@
     {volist name="groups" id="group"}
     <tr>
         <td>{$group.id}</td>
-        <td>{:str_repeat('-', $group['depth'])}{$group.name}</td>
+        <td>{:str_repeat('├', $group['depth'])} {$group.name}</td>
         <td>{$group.display_name}</td>
         <td>
             <a class="btn btn-sm btn-secondary" href="{:url('group/update', ['id' => $group['id']])}">

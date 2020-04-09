@@ -1,10 +1,11 @@
 <?php
-namespace app\apple\controller;
+namespace app\auth\controller;
 
 use think\Controller;
+use think\Db;
 use think\Session;
 
-class Login extends Controller
+class User extends Controller
 {
     /**
      * @var \app\apple\model\User
@@ -18,7 +19,7 @@ class Login extends Controller
         $this->user_model = new \app\apple\model\User;
     }
 
-    public function index()
+    public function login()
     {
         if($this->request->isPost()){
             $user_name = $this->request->post('user_name');
@@ -31,16 +32,29 @@ class Login extends Controller
             }
             if(password_verify($pass, $user['password'])){
                 Session::set('user', $user);
-                $this->success('登录成功', url('index/index'));
+                $privs = Db::table('apl_group_user')
+                    ->where('user_id', $user['id'])
+                    ->select();
+                $pril_ids = [];
+                foreach ($privs as $_priv) {
+                    array_push($pril_ids, $_priv['group_id']);
+                }
+                Session::set('priv', $pril_ids);
+                $user_home = url('index/index/index');
+                if($user['type'] === 1) {
+                    $user_home = url('apple/index/index');
+                }
+                $this->success('登录成功', $user_home);
             }
             $this->error('用户名或密码错误');
         }
         return view();
     }
 
-    public function out()
+    public function logout()
     {
         unset($_SESSION);
-        $this->success('已成功退出', url('login/index'));
+        Session::delete('user');
+        $this->success('已成功退出', url('auth/user/login'));
     }
 }

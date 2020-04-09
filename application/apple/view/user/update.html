@@ -1,7 +1,7 @@
 {extend name="layouts/master"}
 {block name="title"}{$title}{/block}
 {block name="content"}
-<form method="post">
+<form method="post" onsubmit="submitForm()">
     <div class="form-group row">
         <label class="col-form-label col-sm-1" for="user-name">用户名</label>
         <div class="col-sm-10">
@@ -51,10 +51,42 @@
         </div>
     </div>
     <div class="form-group row">
+        <label class="col-form-label col-sm-1">权限</label>
+        <div class="col-sm-10">
+            <div id="group-tree"></div>
+        </div>
+        <input type="hidden" id="privilleges" name="privilleges" value="{$pril_ids}">
+    </div>
+    <div class="form-group row">
         <div class="col-sm-10 offset-sm-1">
             <button type="submit" class="btn btn-sm btn-primary">提 交</button>
             <button type="reset" class="btn btn-sm btn-warning">重 置</button>
         </div>
     </div>
 </form>
+<link href="__PUBLIC__/assets/js/themes/default/style.min.css" rel="stylesheet">
+{/block}
+
+{block name="js"}
+<script src="__PUBLIC__/assets/js/jstree.min.js"></script>
+<script>
+    $('#group-tree').jstree({
+        'core': {
+            'data': {$tree_data}
+        },
+        'plugins': ['checkbox']
+    }).on("loaded.jstree", function (event, data) {
+        //这两句化是在loaded所有的树节点后，然后做的选中操作，这点是需要注意的，loaded.jstree 这个函数
+        //取消选中，然后选中某一个节点
+        $("#group-tree").jstree("deselect_all",true);
+        //$("#keyKamokuCd").val()是选中的节点id，然后后面的一个参数 true表示的是不触发默认select_node.change的事件
+        $('#group-tree').jstree('select_node',$("#privilleges").val().split(','),true);
+    });
+
+    function submitForm() {
+        var groups = $('#group-tree').jstree('get_selected');
+        $('#privilleges').val(groups.join(','));
+        $('#user-form').submit();
+    }
+</script>
 {/block}

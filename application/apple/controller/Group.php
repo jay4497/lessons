@@ -32,6 +32,7 @@ class Group extends Backend
 
     public function add()
     {
+        var_dump(\think\Session::get('user'));
         if($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -41,7 +42,7 @@ class Group extends Backend
             }
 
             try{
-                $this->model->insert($data);
+                $this->model->allowField(true)->save($data);
             } catch (\Exception $ex) {
                 $this->error($ex->getMessage());
             }
@@ -69,7 +70,7 @@ class Group extends Backend
             }
 
             try{
-                $this->model->where('id', $id)->save($data);
+                $this->model->allowField(true)->isUpdate(true)->save($data, ['id' => $id]);
             } catch (\Exception $ex) {
                 $this->error($ex->getMessage());
             }

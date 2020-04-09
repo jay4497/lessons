@@ -20,17 +20,25 @@
             <li class="list-group-item">
                 <a style="display: block;" href="{:url('user/index')}">用户管理</a>
             </li>
+            <li class="list-group-item">
+                <a style="display: block" href="{:url('auth/user/logout')}">退 出</a>
+            </li>
         </ul>
     </div>
     <div class="apple-admin-body">
         <div class="apple-top-bar">
             {block name="title"}{/block}
         </div>
-        {block name="content"}{/block}
+        <div class="container-fluid" style="background-color:#fff;padding-top: 15px;padding-bottom: 15px;border-radius: 5px;">
+            {block name="content"}{/block}
+        </div>
     </div>
 </div>
 
 <style>
+    body{
+        background-color: #f7f7f7;
+    }
     .apple-admin-menu{
         position: fixed;
         top:0;
@@ -55,10 +63,10 @@
         padding-right: 15px;
         border-bottom:solid 1px #999;
         margin-bottom: 24px;
-        margin-left: -40px;
+        margin-left: -30px;
     }
     .apple-admin-body{
-        padding-left: 265px;
+        padding-left: 255px;
     }
 </style>
 <script src="__PUBLIC__/assets/js/jquery.min.js"></script>

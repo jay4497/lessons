@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登 录</title>
+    <link href="__PUBLIC__/assets/style/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="login-box shadow">
+        <h1>登 录</h1>
+        <form method="post">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2" for="user">用户名</label>
+                <div class="col-sm-10">
+                    <input type="text" name="user_name" id="user" class="form-control" placeholder="用户名/邮箱/手机号">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2" for="password">密码</label>
+                <div class="col-sm-10">
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">登 录</button>
+        </form>
+    </div>
+</div>
+<style>
+    body{
+        background-image: linear-gradient(to right , #7A88FF, #7AFFAF);
+    }
+    h1{
+        text-align: center;
+        font-size: 16px;
+        line-height: 35px;
+        margin-bottom: 15px;
+        border-bottom:solid 1px #ccc;
+        color: #7A88FF;
+    }
+    .login-box{
+        background-color: #fff;
+        width: 460px;
+        margin:0 auto;
+        margin-top: 65px;
+        padding:15px 10px;
+        border:solid 1px #ccc;
+        border-radius: 5px;
+    }
+</style>
+</body>
+</html>

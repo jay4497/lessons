@@ -7,6 +7,11 @@ class Index extends Frontend
 {
     public function index()
     {
+        return 'hello';
+    }
+
+    public function video()
+    {
 
     }
 }
