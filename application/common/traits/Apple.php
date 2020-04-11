@@ -56,4 +56,34 @@ trait Apple
         fclose($fp);
         exit();
     }
+
+    protected function getGroupDir($group_id)
+    {
+        $dir = '';
+        $model = new \app\apple\model\Group;
+        $group = $model->where('id', $group_id)->find();
+        if(empty($group)){
+            return $dir;
+        }
+        $dir .= $group['name']. DIRECTORY_SEPARATOR;
+        if($group['pid'] > 0) {
+            $dir .= $this->getGroupDir($group['pid']);
+        }
+        return $dir;
+    }
+
+    protected function getGroupNav($group_id)
+    {
+        $nav = '';
+        $model = new \app\apple\model\Group;
+        $group = $model->where('id', $group_id)->find();
+        if(empty($group)){
+            return $nav;
+        }
+        $nav .= $group['display_name']. ' - ';
+        if($group['pid'] > 0) {
+            $nav .= $this->getGroupNav($group['pid']);
+        }
+        return $nav;
+    }
 }

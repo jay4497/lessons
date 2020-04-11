@@ -38,3 +38,17 @@ CREATE TABLE `apl_group_user` (
   INDEX (`user_id`),
   INDEX (`group_id`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT '用户与权限组别枢纽表';
+
+DROP TABLE IF EXISTS `apl_video`;
+CREATE TABLE `apl_video` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `group_id` INT NOT NULL COMMENT '组别id',
+  `name` VARCHAR(100) NOT NULL COMMENT '名称',
+  `path` TEXT NULL COMMENT '地址',
+  `ext` VARCHAR(10) NULL DEFAULT '' COMMENT '扩展名',
+  `filesize` VARCHAR(20) NULL DEFAULT 0 COMMENT '文件大小 byte',
+  `created_at` TIMESTAMP NULL,
+  `updated_at` TIMESTAMP NULL,
+  PRIMARY KEY (`id`),
+  INDEX (`group_id`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT '视频表';

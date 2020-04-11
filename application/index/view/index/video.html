@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="__PUBLIC__/assets/style/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/assets/js/dplayer/DPlayer.min.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>{$video.name}</h1>
+<div id="player"></div>
+
+<script src="__PUBLIC__/assets/js/dplayer/DPlayer.min.js"></script>
+<script>
+    const dp = new DPlayer({
+        container: document.getElementById('player'),
+        screenshot: true,
+        video: {
+            url: '{:url("index/play", ["id" => $video["id"]])}'
+        }
+    });
+</script>
+</body>
+</html>

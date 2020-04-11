@@ -7,6 +7,7 @@
 
 <div class="btn-group" style="margin-bottom: 15px;">
     <a class="btn btn-sm btn-outline-primary" href="{:url('group/add')}">添加</a>
+    <a class="btn btn-sm btn-outline-info" href="javascript:;" onclick="refreshVideo();">刷新</a>
 </div>
 
 <table class="table">
@@ -32,4 +33,21 @@
     </tr>
     {/volist}
 </table>
+{/block}
+
+{block name="js"}
+<script>
+    function refreshVideo() {
+        $.ajax({
+            url: "{:url('task/auto_fill')}",
+            dataType: 'json',
+            success: function(res) {
+                alert(res.msg)
+            },
+            error: function() {
+                alert('请求发生错误')
+            }
+        })
+    }
+</script>
 {/block}
