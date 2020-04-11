@@ -19,7 +19,7 @@ class Frontend extends Controller
             $this->error('未登录或登录超时，请重新登录', url('auth/user/login'));
         }
         $user = Session::get('user');
-        if($user['type'] === 0) {
+        if($user['type'] !== 0) {
             $this->error('非法的用户', url('auth/user/login'));
         }
         if($user['status'] == 'forbiden') {

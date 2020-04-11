@@ -18,7 +18,7 @@ class Backend extends Controller
             $this->error('请登录', url('auth/user/login'));
         }
         $user = Session::get('user');
-        if($user['type'] === 1) {
+        if($user['type'] !== 1) {
             $this->error('非法的用户', url('auth/user/login'));
         }
         if($user['status'] == 'forbiden') {
