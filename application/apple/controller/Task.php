@@ -15,32 +15,36 @@ class Task extends Backend
         $groups = $group_model->select();
 
         Db::startTrans();
+        $video_model->where('id', '>', 0)->delete();
         foreach ($groups as $group) {
             $group_id = $group['id'];
             $group_dir = $this->getGroupDir($group_id);
+            $group_dir = implode(DIRECTORY_SEPARATOR, $group_dir). DIRECTORY_SEPARATOR;
             $final_dir = $base_dir. $group_dir;
-            $dir_list = scandir($final_dir);
-            foreach ($dir_list as $_item) {
-                if($_item === '.' || $_item === '..'){
-                    continue;
-                }
-                if(is_file($final_dir. $_item)){
-                    $filesize = filesize($final_dir. $_item);
-                    $segments = explode('.', $_item);
-                    $ext = array_pop($segments);
-                    $file_name = implode('', $segments);
-                    $file_path = $save_dir. str_replace('\\', '/', $group_dir);
-                    try{
-                        $video_model->allowField(true)->save([
-                            'group_id' => $group['id'],
-                            'name' => $file_name,
-                            'path' => $file_path,
-                            'ext' => $ext,
-                            'filesize' => $filesize
-                        ]);
-                    } catch (\Exception $ex) {
-                        Db::rollback();
-                        return $this->error('发生错误：'. $ex->getMessage());
+            if(is_dir($final_dir)) {
+                $dir_list = scandir($final_dir);
+                foreach ($dir_list as $_item) {
+                    if ($_item === '.' || $_item === '..') {
+                        continue;
+                    }
+                    if (is_file($final_dir . $_item)) {
+                        $filesize = filesize($final_dir . $_item);
+                        $segments = explode('.', $_item);
+                        $ext = array_pop($segments);
+                        $file_name = implode('', $segments);
+                        $file_path = $save_dir . str_replace('\\', '/', $group_dir). $_item;
+                        try {
+                            $video_model->allowField(true)->save([
+                                'group_id' => $group['id'],
+                                'name' => $file_name,
+                                'path' => $file_path,
+                                'ext' => $ext,
+                                'filesize' => $filesize
+                            ]);
+                        } catch (\Exception $ex) {
+                            Db::rollback();
+                            return $this->error('发生错误：' . $ex->getMessage());
+                        }
                     }
                 }
             }
@@ -49,7 +53,7 @@ class Task extends Backend
         return $this->success('刷新成功');
     }
 
-    private function error($msg, $data = [])
+    protected function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
     {
         header('Content-Type: application/json; charset=utf-8');
 
@@ -61,7 +65,7 @@ class Task extends Backend
         return json_encode($body, JSON_UNESCAPED_UNICODE);
     }
 
-    private function success($msg, $data = [])
+    protected function success($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
     {
         header('Content-Type: application/json; charset=utf-8');
 

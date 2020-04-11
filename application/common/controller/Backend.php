@@ -17,6 +17,13 @@ class Backend extends Controller
         if(!Session::has('user') || empty(Session::get('user'))){
             $this->error('请登录', url('auth/user/login'));
         }
+        $user = Session::get('user');
+        if($user['type'] === 1) {
+            $this->error('非法的用户', url('auth/user/login'));
+        }
+        if($user['status'] == 'forbiden') {
+            $this->error('用户已被禁用', url('auth/user/login'));
+        }
     }
 
     protected function jsTree($pid = 0)

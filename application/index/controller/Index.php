@@ -25,6 +25,7 @@ class Index extends Frontend
 
     public function index()
     {
+        var_dump($this->priv_ids);
         $id = $this->request->get('id', 0);
         if(!in_array($id, $this->priv_ids)) {
             $this->error('权限受限', url('index/index'));
@@ -33,9 +34,10 @@ class Index extends Frontend
             ->where('id', $id)
             ->find();
         if(empty($group)) {
-            $this->error('组别不存在', url('index/index'));
+
+        } else {
+            $group['apple_nav'] = implode(' - ', $this->getGroupNav($group['id']));
         }
-        $group['apple_nav'] = $this->getGroupNav($group['id']);
 
         $videos = $this->video_model
             ->where('group_id', $id)
@@ -73,6 +75,7 @@ class Index extends Frontend
             return '';
         }
         $file = THINK_PATH. '..'. DIRECTORY_SEPARATOR. 'public'. $video['path'];
+        //var_dump($file);exit;
         $this->echo_media($file);
     }
 }

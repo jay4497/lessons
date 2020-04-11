@@ -8,8 +8,8 @@
 </head>
 
 <body>
-<div class="container">
-    <div class="app-front-menu-side">
+<div class="container" style="position: relative">
+    <div class="apple-front-menu-side">
         <ul class="list-group">
             {volist name="categories" id="cat"}
             <li class="list-group-item">
@@ -57,7 +57,7 @@
                 <th>名称</th>
             </tr>
             {volist name="videos" id="video"}
-            <tr data-href="{:url('index/video', ['id' => $video['id']])}">
+            <tr data-href="{:url('index/video', ['id' => $video['id']])}" onclick="openvideo(this)">
                 <td>{$video.id}</td>
                 <td>{$video.name}</td>
             </tr>
@@ -68,6 +68,19 @@
         </div>
     </div>
 </div>
+<style>
+    .apple-front-menu-side{
+        width: 230px;
+        position: absolute;
+        top:0;
+        left:0;
+    }
+    .apple-front-body{
+        width:100%;
+        padding-left: 250px;
+    }
+</style>
+<script src="__PUBLIC__/assets/js/jquery.min.js"></script>
 <script>
     function openvideo(el) {
         window.open($(el).data('href'))

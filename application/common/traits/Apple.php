@@ -5,6 +5,7 @@ trait Apple
 {
     protected function echo_media($file)
     {
+        set_time_limit(0);
         $fp = @fopen($file, 'rb');
         $size = filesize($file); // File size
         $length = $size; // Content length
@@ -49,7 +50,6 @@ trait Apple
             if ($p + $buffer > $end) {
                 $buffer = $end - $p + 1;
             }
-            set_time_limit(0);
             echo fread($fp, $buffer);
             flush();
         }
@@ -57,32 +57,63 @@ trait Apple
         exit();
     }
 
+    protected function treeGroup($pid = 0)
+    {
+        $model = new \app\apple\model\Group;
+        $groups = $model
+            ->where('pid', $pid)
+            ->select();
+        if(!empty($groups)){
+            foreach ($groups as &$group) {
+                $group['children'] = $this->treeGroup($group['id']);
+            }
+            unset($group);
+        }
+        return $groups;
+    }
+
+    protected function treeList($data, $depth = 0)
+    {
+        $list = [];
+        foreach ($data as &$item) {
+            $item['depth'] = $depth;
+            array_push($list, $item);
+            $children = $item['children'];
+            unset($item['children']);
+            if(!empty($children)) {
+                $list = array_merge($list, $this->treeList($children, $depth + 1));
+            }
+        }
+        unset($item);
+        return $list;
+    }
+
     protected function getGroupDir($group_id)
     {
-        $dir = '';
+        $dir = [];
         $model = new \app\apple\model\Group;
         $group = $model->where('id', $group_id)->find();
         if(empty($group)){
             return $dir;
         }
-        $dir .= $group['name']. DIRECTORY_SEPARATOR;
+        $dir = array_merge([$group['name']], $dir);
         if($group['pid'] > 0) {
-            $dir .= $this->getGroupDir($group['pid']);
+            $dir = array_merge($this->getGroupDir($group['pid']), $dir);
         }
         return $dir;
     }
 
     protected function getGroupNav($group_id)
     {
-        $nav = '';
+        $nav = [];
         $model = new \app\apple\model\Group;
         $group = $model->where('id', $group_id)->find();
         if(empty($group)){
             return $nav;
         }
-        $nav .= $group['display_name']. ' - ';
+        $nav = array_merge([$group['display_name']], $nav);
         if($group['pid'] > 0) {
-            $nav .= $this->getGroupNav($group['pid']);
+            $nav = array_merge($this->getGroupNav($group['pid']), $nav);
         }
         return $nav;
     }

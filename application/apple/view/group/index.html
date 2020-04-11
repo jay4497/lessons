@@ -39,7 +39,7 @@
 <script>
     function refreshVideo() {
         $.ajax({
-            url: "{:url('task/auto_fill')}",
+            url: "{:url('task/autofill')}",
             dataType: 'json',
             success: function(res) {
                 alert(res.msg)
