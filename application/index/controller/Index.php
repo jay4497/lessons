@@ -25,7 +25,6 @@ class Index extends Frontend
 
     public function index()
     {
-        var_dump($this->priv_ids);
         $id = $this->request->get('id', 0);
         if(!in_array($id, $this->priv_ids)) {
             $this->error('权限受限', url('index/index'));
