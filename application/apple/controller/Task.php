@@ -11,11 +11,11 @@ class Task extends Backend
         $base_dir = THINK_PATH. '..'. DIRECTORY_SEPARATOR. 'public'. DIRECTORY_SEPARATOR. 'videos'. DIRECTORY_SEPARATOR;
         $save_dir = '/videos/';
         $group_model = new \app\apple\model\Group;
-        $video_model = new \app\apple\model\Video;
+        $video_model_init = new \app\apple\model\Video;
         $groups = $group_model->select();
 
         Db::startTrans();
-        $video_model->where('id', '>', 0)->delete();
+        $video_model_init->where('id', '>', 0)->delete();
         foreach ($groups as $group) {
             $group_id = $group['id'];
             $group_dir = $this->getGroupDir($group_id);
@@ -34,23 +34,37 @@ class Task extends Backend
                         $file_name = implode('', $segments);
                         $file_path = $save_dir . str_replace('\\', '/', $group_dir). $_item;
                         try {
-                            $video_model->allowField(true)->save([
+                            $video_model = new \app\apple\model\Video([
                                 'group_id' => $group['id'],
                                 'name' => $file_name,
                                 'path' => $file_path,
                                 'ext' => $ext,
                                 'filesize' => $filesize
                             ]);
+                            $video_model->allowField(true)->save();
                         } catch (\Exception $ex) {
                             Db::rollback();
-                            return $this->error('发生错误：' . $ex->getMessage());
+                            $this->error('发生错误：' . $ex->getMessage());
                         }
                     }
                 }
             }
         }
         Db::commit();
-        return $this->success('刷新成功');
+        $this->success('刷新成功');
+    }
+
+    public function gerateGroup()
+    {
+        $base_dir = THINK_PATH. '..'. DIRECTORY_SEPARATOR. 'public'. DIRECTORY_SEPARATOR. 'videos'. DIRECTORY_SEPARATOR;
+        $save_dir = '/videos/';
+        $group_model = new \app\apple\model\Group;
+    }
+
+    private function allDir($start)
+    {
+        $dir_list = scandir($start);
+
     }
 
     protected function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
@@ -62,7 +76,7 @@ class Task extends Backend
             'msg' => $msg,
             'data' => $data
         ];
-        return json_encode($body, JSON_UNESCAPED_UNICODE);
+        exit(json_encode($body, JSON_UNESCAPED_UNICODE));
     }
 
     protected function success($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
@@ -74,6 +88,6 @@ class Task extends Backend
             'msg' => $msg,
             'data' => $data
         ];
-        return json_encode($body, JSON_UNESCAPED_UNICODE);
+        exit(json_encode($body, JSON_UNESCAPED_UNICODE));
     }
 }

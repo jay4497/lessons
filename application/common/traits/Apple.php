@@ -63,12 +63,10 @@ trait Apple
         $groups = $model
             ->where('pid', $pid)
             ->select();
-        if(!empty($groups)){
-            foreach ($groups as &$group) {
-                $group['children'] = $this->treeGroup($group['id']);
-            }
-            unset($group);
+        foreach ($groups as &$group) {
+            $group['children'] = $this->treeGroup($group['id']);
         }
+        unset($group);
         return $groups;
     }
 

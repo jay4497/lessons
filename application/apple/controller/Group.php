@@ -32,7 +32,6 @@ class Group extends Backend
 
     public function add()
     {
-        var_dump(\think\Session::get('user'));
         if($this->request->isPost()) {
             $data = $this->request->post();
 
@@ -42,7 +41,7 @@ class Group extends Backend
             }
 
             try{
-                $this->model->allowField(true)->save($data);
+                $this->model->allowField(true)->data($data)->save();
             } catch (\Exception $ex) {
                 $this->error($ex->getMessage());
             }
@@ -97,35 +96,5 @@ class Group extends Backend
             $this->error($ex->getMessage());
         }
         $this->success('删除成功', url('group/index'));
-    }
-
-    private function treeGroup($pid = 0)
-    {
-        $groups = $this->model
-            ->where('pid', $pid)
-            ->select();
-        if(!empty($groups)){
-            foreach ($groups as &$group) {
-                $group['children'] = $this->treeGroup($group['id']);
-            }
-            unset($group);
-        }
-        return $groups;
-    }
-
-    private function treeList($data, $depth = 0)
-    {
-        $list = [];
-        foreach ($data as &$item) {
-            $item['depth'] = $depth;
-            array_push($list, $item);
-            $children = $item['children'];
-            unset($item['children']);
-            if(!empty($children)) {
-                $list = array_merge($list, $this->treeList($children, $depth + 1));
-            }
-        }
-        unset($item);
-        return $list;
     }
 }

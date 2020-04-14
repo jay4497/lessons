@@ -44,7 +44,7 @@ class User extends Backend
             $privilleges = explode(',', $data['privilleges']);
             Db::startTrans();
             try{
-                $this->model->allowField(true)->save($data);
+                $this->model->allowField(true)->data($data)->save();
                 $uid = $this->model->getLastInsID();
                 $pril_data = [];
                 foreach ($privilleges as $_pril) {
