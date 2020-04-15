@@ -1,90 +1,37 @@
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>{$title}</title>
-    <link href="__PUBLIC__/assets/style/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-<div class="container" style="position: relative">
-    <div class="apple-front-menu-side">
-        <ul class="list-group">
-            {volist name="categories" id="cat"}
-            <li class="list-group-item">
-                <a href="{:url('index/index')}?id={$cat.id}">
-                    {$cat.display_name}
-                </a>
-            </li>
-            {if condition="!empty($cat['children'])"}
-            <ul class="list-group">
-                {volist name="cat['children']" id="cat_c"}
-                <li class="list-group-item">
-                    <a href="{:url('index/index')}?id={$cat_c.id}">
-                        {$cat_c.display_name}
-                    </a>
-                </li>
-                {if condition="!empty($cat_c['children'])"}
-                <ul class="list-group">
-                    {volist name="cat_c['children']" id="cat_cc"}
-                    <li class="list-group-item">
-                        <a href="{:url('index/index')}?id={$cat_cc.id}">
-                            {$cat_cc.display_name}
-                        </a>
-                    </li>
-                    {/volist}
-                </ul>
-                {/if}
-                {/volist}
-            </ul>
-            {/if}
-            {/volist}
-        </ul>
-    </div>
-    <div class="apple-front-body">
-        <div class="apple-panel">
-            <p>
-                <strong>类目：</strong>
-                {if condition="$group"}
-                    {$group.apple_nav}
-                {/if}
-            </p>
-        </div>
-        <table class="table">
-            <tr>
-                <th>ID</th>
-                <th>名称</th>
-            </tr>
-            {volist name="videos" id="video"}
-            <tr data-href="{:url('index/video', ['id' => $video['id']])}" onclick="openvideo(this)">
-                <td>{$video.id}</td>
-                <td>{$video.name}</td>
-            </tr>
-            {/volist}
-        </table>
-        <div class="apple-page">
-            {$videos->render()}
-        </div>
-    </div>
+{extend name="layouts/master"}
+{block name="title"}{$title}{/block}
+{block name="content"}
+<div class="apple-panel">
+    <p>
+        类目：
+        {if condition="$group"}
+        {$group.apple_nav}
+        {/if}
+    </p>
+</div>
+<table class="table">
+    <tr>
+        <th>课 程</th>
+    </tr>
+    {volist name="videos" id="video"}
+    <tr data-href="{:url('index/video', ['id' => $video['id']])}" onclick="openvideo(this)" style="color:#3d6cb9;cursor: pointer;">
+        <td>{$video.name}</td>
+    </tr>
+    {/volist}
+</table>
+<div class="apple-page">
+    {$videos->render()}
 </div>
 <style>
-    .apple-front-menu-side{
-        width: 230px;
-        position: absolute;
-        top:0;
-        left:0;
-    }
-    .apple-front-body{
-        width:100%;
-        padding-left: 250px;
+    th{
+        font-weight:normal;
     }
 </style>
-<script src="__PUBLIC__/assets/js/jquery.min.js"></script>
+{/block}
+{block name="js"}
 <script>
     function openvideo(el) {
         window.open($(el).data('href'))
     }
 </script>
-</body>
-</html>
+{/block}
