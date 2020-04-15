@@ -57,14 +57,48 @@ class Task extends Backend
     public function gerateGroup()
     {
         $base_dir = THINK_PATH. '..'. DIRECTORY_SEPARATOR. 'public'. DIRECTORY_SEPARATOR. 'videos'. DIRECTORY_SEPARATOR;
-        $save_dir = '/videos/';
-        $group_model = new \app\apple\model\Group;
+        
+        $all_group_dirs = $this->allDir($base_dir, 'cfcd208495d565ef66e7dff9f98764da');
+        Db::startTrans();
+        foreach($all_group_dirs as $item) {
+            $group_model = new \app\apple\model\Group;
+            $segments = explode(DIRECTORY_SEPARATOR, $item['dir']);
+            $group_name = array_pop($segments);
+            $group_data = [
+                'uqid' => $item['id'],
+                'pid' => $item['pid'],
+                'name' => $group_name,
+                'display_name' => $group_name
+            ];
+            try {
+                $group_model->allowField(true)->data($group_data)->save();
+            } catch (\Exception $ex) {
+                Db::rollback();
+                $this->error('发生错误：' . $ex->getMessage());
+            }
+        }
+        Db::commit();
+        $this->success('自动创建成功');
     }
 
-    private function allDir($start)
+    private function allDir($dir, $pid = 0)
     {
-        $dir_list = scandir($start);
-
+        $trees = [];
+        $dir_list = scandir($dir);
+        foreach($dir_list as $_item) {
+            if($_item == '.' || $_item == '..') {
+                continue;
+            }
+            if(is_dir($dir. $_item)){
+                array_push($trees, [
+                    'dir' => $dir. $_item,
+                    'id' => md5($dir. $_item),
+                    'pid' => $pid
+                ]);
+                $trees = array_merge($trees, scan($dir. $_item. DIRECTORY_SEPARATOR, md5($dir. $_item)));
+            }
+        }
+        return $trees;
     }
 
     protected function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
