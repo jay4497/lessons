@@ -1,0 +1,29 @@
+{extend name="layouts/master"}
+{block name="title"}{$title}{/block}
+{block name="content"}
+<form method="post">
+    <div class="form-group row">
+        <label class="col-form-label col-sm-1" for="site-name">网站名称</label>
+        <div class="col-sm-8">
+            <input type="text" name="site_name" id="site-name" class="form-control" placeholder="网站名称" value="{$option.site_name}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-1" for="logo">网站LOGO</label>
+        <div class="col-sm-5">
+            <input type="file" name="logo" id="logo" class="form-control">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-1" for="status">网站状态</label>
+        <div class="col-sm-3">
+            <select name="status" id="status" class="form-control">
+                <option value="running" {if condition="$option['status'] == 'running'"}selected{/if}>运行中</option>
+                <option value="pause" {if condition="$option['status'] == 'pause'"}selected{/if}>维护中</option>
+                <option value="stop" {if condition="$option['status'] == 'stop'"}selected{/if}>停止</option>
+            </select>
+        </div>
+    </div>
+    <button class="btn btn-sm btn-primary" type="submit">修 改</button>
+</form>
+{/block}

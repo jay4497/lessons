@@ -14,7 +14,11 @@ class Frontend extends Controller
     public function _initialize()
     {
         parent::_initialize();
-
+        $option = $this->getOptions();
+        if(@$option['status'] !== 'running') {
+            exit('网站维护中...');
+        }
+        $this->assign('web_option', $option);
         if(!Session::has('user') || empty(Session::get('user'))) {
             $this->error('未登录或登录超时，请重新登录', url('auth/user/login'));
         }

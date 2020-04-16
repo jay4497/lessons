@@ -24,6 +24,9 @@ class Backend extends Controller
         if($user['status'] == 'forbiden') {
             $this->error('用户已被禁用', url('auth/user/login'));
         }
+
+        $option = $this->getOptions();
+        $this->assign('web_option', $option);
     }
 
     protected function jsTree($pid = 0)

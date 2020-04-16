@@ -52,3 +52,17 @@ CREATE TABLE `apl_video` (
   PRIMARY KEY (`id`),
   INDEX (`group_id`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT '视频表';
+
+ALTER TABLE `apl_group`
+  ADD COLUMN `uqid` VARCHAR(50) NOT NULL COMMENT '唯一id' AFTER `id`,
+  MODIFY `pid` VARCHAR(50) NULL DEFAULT 0 COMMENT '父级uqid';
+
+DROP TABLE IF EXISTS `apl_options`;
+CREATE TABLE `apl_options` (
+  `id` TINYINT(1) NOT NULL AUTO_INCREMENT,
+  `site_name` VARCHAR(100) NOT NULL COMMENT '网站名称',
+  `logo` TEXT NULL COMMENT '网站LOGO',
+  `status` ENUM('running', 'pause', 'stop') DEFAULT 'running' COMMENT '网站状态',
+  PRIMARY KEY (`id`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT '系统设置表';
+INSERT INTO `apl_options` VALUES (1, '网站名称', '', 'running');

@@ -63,10 +63,12 @@ trait Apple
         $groups = $model
             ->where('pid', $pid)
             ->select();
-        foreach ($groups as &$group) {
-            $group['children'] = $this->treeGroup($group['id']);
+        if(!empty($groups)) {
+            foreach ($groups as &$group) {
+                $group['children'] = $this->treeGroup($group['uqid']);
+            }
+            unset($group);
         }
-        unset($group);
         return $groups;
     }
 
@@ -90,7 +92,7 @@ trait Apple
     {
         $dir = [];
         $model = new \app\apple\model\Group;
-        $group = $model->where('id', $group_id)->find();
+        $group = $model->where('uqid', $group_id)->find();
         if(empty($group)){
             return $dir;
         }
@@ -105,7 +107,7 @@ trait Apple
     {
         $nav = [];
         $model = new \app\apple\model\Group;
-        $group = $model->where('id', $group_id)->find();
+        $group = $model->where('uqid', $group_id)->find();
         if(empty($group)){
             return $nav;
         }
@@ -114,5 +116,12 @@ trait Apple
             $nav = array_merge($this->getGroupNav($group['pid']), $nav);
         }
         return $nav;
+    }
+
+    protected function getOptions()
+    {
+        $model = new \app\apple\model\Options;
+        $option = $model->find();
+        return $option;
     }
 }

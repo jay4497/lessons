@@ -57,9 +57,10 @@ class Task extends Backend
     public function gerateGroup()
     {
         $base_dir = THINK_PATH. '..'. DIRECTORY_SEPARATOR. 'public'. DIRECTORY_SEPARATOR. 'videos'. DIRECTORY_SEPARATOR;
-        
-        $all_group_dirs = $this->allDir($base_dir, 'cfcd208495d565ef66e7dff9f98764da');
+        $all_group_dirs = $this->allDir($base_dir, 0);
         Db::startTrans();
+        $init_group_model = new \app\apple\model\Group;
+        $init_group_model->where('id', '>', 0)->delete();
         foreach($all_group_dirs as $item) {
             $group_model = new \app\apple\model\Group;
             $segments = explode(DIRECTORY_SEPARATOR, $item['dir']);
@@ -95,7 +96,7 @@ class Task extends Backend
                     'id' => md5($dir. $_item),
                     'pid' => $pid
                 ]);
-                $trees = array_merge($trees, scan($dir. $_item. DIRECTORY_SEPARATOR, md5($dir. $_item)));
+                $trees = array_merge($trees, $this->allDir($dir. $_item. DIRECTORY_SEPARATOR, md5($dir. $_item)));
             }
         }
         return $trees;

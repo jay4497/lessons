@@ -11,14 +11,17 @@
 <div class="container-fluid">
     <div class="apple-admin-menu">
         <ul class="list-group">
-            <li class="list-group-item" style="height: 75px">
-                Logo
+            <li class="list-group-item" style="height: 45px;font-size:16px;font-weight: bold;">
+                {$web_option.site_name}
             </li>
             <li class="list-group-item">
                 <a style="display: block" href="{:url('group/index')}">权限分组</a>
             </li>
             <li class="list-group-item">
                 <a style="display: block;" href="{:url('user/index')}">用户管理</a>
+            </li>
+            <li class="list-group-item">
+                <a style="display: block;" href="{:url('options/index')}">系统设置</a>
             </li>
             <li class="list-group-item">
                 <a style="display: block" href="{:url('auth/user/logout')}">退 出</a>

@@ -6,8 +6,11 @@
 </div>
 
 <div class="btn-group" style="margin-bottom: 15px;">
+    {if condition="count($groups) <= 0 || @$_GET['force'] == 1"}
+    <a class="btn btn-sm btn-outline-primary" href="javascript:;" onclick="initGroup();">分组初始化</a>
+    {/if}
     <a class="btn btn-sm btn-outline-primary" href="{:url('group/add')}">添加</a>
-    <a class="btn btn-sm btn-outline-info" href="javascript:;" onclick="refreshVideo();">刷新</a>
+    <a class="btn btn-sm btn-outline-info" href="javascript:;" onclick="refreshVideo();">扫描视频</a>
 </div>
 
 <table class="table">
@@ -48,6 +51,20 @@
                 alert('请求发生错误')
             }
         })
+    }
+    function initGroup() {
+        if(confirm('初始化分组会清除当前的所有分组，请谨慎操作！')) {
+            $.ajax({
+                url: '{:url("task/gerateGroup")}',
+                dataType: 'json',
+                success: function (res) {
+                    alert(res.msg);
+                },
+                error: function () {
+                    alert('请求发生错误');
+                }
+            });
+        }
     }
 </script>
 {/block}
