@@ -83,6 +83,7 @@ trait Apple
             if(!empty($children)) {
                 $list = array_merge($list, $this->treeList($children, $depth + 1));
             }
+            $item['subs'] = count($children);
         }
         unset($item);
         return $list;
@@ -123,5 +124,31 @@ trait Apple
         $model = new \app\apple\model\Options;
         $option = $model->find();
         return $option;
+    }
+
+    protected function frontGroups()
+    {
+        $list = '<ul class="list-group">';
+        $trees = $this->treeGroup();
+        $tree_list = $this->treeList($trees);
+        $last_parent = '';
+        foreach ($tree_list as $_tree) {
+            if($_tree['depth'] === 0) {
+                $last_parent = $_tree['uqid'];
+            }
+            $flag = $last_parent. '-'. $_tree['depth'];
+            $check_icon = '+';
+            $href = 'javascript:;';
+            if($_tree['subs'] <= 0) {
+                $check_icon = '';
+                $href = url('index/index', ['id' => $_tree['id']]);
+            }
+            $list .= '<li class="list-group-item '. $flag. '" data-flag="'. $flag. '" onclick="toggleChildren(this)">'
+                . '<a href="'. $href. '">'
+                . str_repeat('&nbsp;&nbsp;', $_tree['depth']). $check_icon. $_tree['display_name']
+                . '</a></li>';
+        }
+        $list .= '</ul>';
+        return $list;
     }
 }
