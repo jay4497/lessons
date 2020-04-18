@@ -98,7 +98,7 @@ trait Apple
             return $dir;
         }
         $dir = array_merge([$group['name']], $dir);
-        if($group['pid'] > 0) {
+        if($group['pid']) {
             $dir = array_merge($this->getGroupDir($group['pid']), $dir);
         }
         return $dir;
@@ -113,7 +113,7 @@ trait Apple
             return $nav;
         }
         $nav = array_merge([$group['display_name']], $nav);
-        if($group['pid'] > 0) {
+        if($group['pid']) {
             $nav = array_merge($this->getGroupNav($group['pid']), $nav);
         }
         return $nav;
@@ -136,18 +136,25 @@ trait Apple
             if($_tree['depth'] === 0) {
                 $last_parent = $_tree['uqid'];
             }
+            $common = $last_parent;
+            if($_tree['depth'] === 0) {
+                $common = '';
+            }
             $flag = $last_parent. '-'. $_tree['depth'];
-            $check_icon = '+';
+            $check_icon = '<i class="fas fa-angle-down"></i> ';
             $href = 'javascript:;';
             if($_tree['subs'] <= 0) {
                 $check_icon = '';
                 $href = url('index/index', ['id' => $_tree['id']]);
             }
-            $list .= '<li class="list-group-item '. $flag. '" data-flag="'. $flag. '" onclick="toggleChildren(this)">'
+            $list .= '<li class="list-group-item '. $common. ' '. $flag. '" data-flag="'. $flag. '" onclick="toggleChildren(this)">'
                 . '<a href="'. $href. '">'
                 . str_repeat('&nbsp;&nbsp;', $_tree['depth']). $check_icon. $_tree['display_name']
                 . '</a></li>';
         }
+        $list .= '<li class="list-group-item">'
+            . '<a href="'. url('auth/user/logout'). '"><i class="fas fa-sign-in-alt"></i> 退 出</a>'
+            . '</li>';
         $list .= '</ul>';
         return $list;
     }

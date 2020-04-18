@@ -34,5 +34,7 @@ class Frontend extends Controller
 
         $categories = $this->treeGroup();
         $this->assign('categories', $categories);
+        $main_menu = $this->frontGroups();
+        $this->assign('main_menu', $main_menu);
     }
 }

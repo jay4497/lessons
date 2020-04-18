@@ -23,19 +23,19 @@ class Index extends Frontend
         $this->group_model = new \app\apple\model\Group;
     }
 
-    public function index()
+    public function index($id = 0)
     {
-        $id = $this->request->get('id', 0);
         if(!in_array($id, $this->priv_ids)) {
             $this->error('权限受限', url('index/index'));
         }
+
         $group = $this->group_model
             ->where('id', $id)
             ->find();
         if(empty($group)) {
 
         } else {
-            $group['apple_nav'] = implode(' - ', $this->getGroupNav($group['id']));
+            $group['apple_nav'] = implode(' / ', $this->getGroupNav($group['uqid']));
         }
 
         $videos = $this->video_model

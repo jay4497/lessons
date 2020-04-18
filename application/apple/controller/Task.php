@@ -17,9 +17,10 @@ class Task extends Backend
         Db::startTrans();
         $video_model_init->where('id', '>', 0)->delete();
         foreach ($groups as $group) {
-            $group_id = $group['id'];
+            $group_id = $group['uqid'];
             $group_dir = $this->getGroupDir($group_id);
             $group_dir = implode(DIRECTORY_SEPARATOR, $group_dir). DIRECTORY_SEPARATOR;
+            //echo $group_dir;
             $final_dir = $base_dir. $group_dir;
             if(is_dir($final_dir)) {
                 $dir_list = scandir($final_dir);

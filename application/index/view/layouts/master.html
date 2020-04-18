@@ -5,42 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>{block name="title"}{/block}</title>
     <link href="__PUBLIC__/assets/style/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/assets/fontawesome/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
 <div class="container shadow" id="master-body" style="position: relative;padding-top:15px;padding-bottom: 25px;border-radius: 5px;background-color:#fff;">
     <div class="apple-front-menu-side" id="master-menu">
-        <ul class="list-group">
-            {volist name="categories" id="cat"}
-            <li class="list-group-item">
-                <a href="{:url('index/index')}?id={$cat.id}">
-                    {$cat.display_name}
-                </a>
-            </li>
-            {if condition="!empty($cat['children'])"}
-            <ul class="list-group">
-                {volist name="cat['children']" id="cat_c"}
-                <li class="list-group-item">
-                    <a href="{:url('index/index')}?id={$cat_c.id}">
-                        {$cat_c.display_name}
-                    </a>
-                </li>
-                {if condition="!empty($cat_c['children'])"}
-                <ul class="list-group">
-                    {volist name="cat_c['children']" id="cat_cc"}
-                    <li class="list-group-item">
-                        <a href="{:url('index/index')}?id={$cat_cc.id}">
-                            {$cat_cc.display_name}
-                        </a>
-                    </li>
-                    {/volist}
-                </ul>
-                {/if}
-                {/volist}
-            </ul>
-            {/if}
-            {/volist}
-        </ul>
+        {$main_menu}
     </div>
     <div class="apple-front-body">
         {block name="content"}{/block}
@@ -95,7 +66,18 @@ function toggleChildren(el) {
     var children =  $('.' + id + '-' + (num + 1));
     if(children) {
         children.toggle();
+        for(var i = 0; i < 100; i++) {
+            if(i > (num + 1)) {
+                var deeper = $('.' + id + '-' + i);
+                if($(children).css('display') == 'none') {
+                    if(deeper) {
+                        deeper.hide();
+                    }
+                }
+            }
+        }
     }
+
 }
 </script>
 {block name="js"}{/block}

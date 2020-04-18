@@ -33,12 +33,12 @@ class Backend extends Controller
     {
         $model = new Group;
         $groups = $model
-            ->field('id, display_name, pid')
+            ->field('id, uqid, display_name, pid')
             ->where('pid', $pid)
             ->select();
         foreach ($groups as &$group) {
             $group['text'] = $group['display_name'];
-            $group['children'] = $this->jsTree($group['id']);
+            $group['children'] = $this->jsTree($group['uqid']);
         }
         unset($group);
         return $groups;
